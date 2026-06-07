@@ -37,6 +37,7 @@ macOS 自动化 agent 集合，统一通过 Server酱推送内容到微信。
 - **`run.sh` 参数约定**：
   - `financial_news` / `brain_science` 第一个参数是 slot 名（`morning2`/`afternoon`/`night` 或 `morning`/`night`），成功后写 `.stamps/<slot>`（brain_science 写 `brain_<slot>`）
   - `daily_brief` 不接 slot，stamp 文件硬编码为 `.stamps/daily_brief`
+  - `wallstreet_ai` 第一个参数是 slot 名（`monday`/`friday`），成功后写 `.stamps/wallstreet_<slot>`
   - `notes_sync` 不接 slot、不写 stamp（按 launchd 间隔触发，无补跑机制）
   - `paper_reader` / `shukatsu_youtube` 是手动 CLI，参数透传给 python
 - **LaunchAgents**：`~/Library/LaunchAgents/com.<agent_name>.<slot>.plist`
@@ -44,9 +45,10 @@ macOS 自动化 agent 集合，统一通过 Server酱推送内容到微信。
 
 | 变量 | 用途 |
 |------|------|
-| `ANTHROPIC_API_KEY` | Claude API（paper_reader） |
+| `ANTHROPIC_API_KEY` | Claude API（paper_reader、wallstreet_ai） |
 | `GROQ_API_KEY` | Groq LLaMA（financial_news、brain_science） |
 | `NEWSAPI_KEY` | NewsAPI 英文新闻源 |
+| `GNEWS_KEY` | GNews 新闻源（financial_news） |
 | `SERVERCHAN_KEY` | Server酱微信推送 |
 
 ## Skills（`~/.claude/skills/`）
