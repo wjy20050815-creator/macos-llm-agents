@@ -72,6 +72,7 @@ SLOT_CONFIG = {
 }
 
 MAX_RETRIES = 3
+DEDUP_WINDOW = 4  # 仅与最近 N 条历史比对去重，允许同主题在更久之后换角度重现
 
 SYSTEM_PROMPT = """你是一位专业的神经科学科普编辑。你的任务是综合以下真实学术论文和权威健康媒体文章中的发现，改写为通俗易懂的中文科普推送。可以融合多条来源的内容，但核心发现必须来自所提供的材料，不得凭空编造。
 
@@ -313,6 +314,7 @@ def main():
     content = None
     topic = None
     rejected: list[str] = []
+    fallback: tuple[str, str] | None = None  # 通过校验但判重的首个候选，用于兜底
 
     for attempt in range(1, MAX_RETRIES + 1):
         extended_history = history + rejected
@@ -328,8 +330,10 @@ def main():
             print(f"[尝试 {attempt}/{MAX_RETRIES}] AI 输出缺少必要字段（📌/💡/📎）", file=sys.stderr)
             continue
 
-        if is_duplicate(topic, history):
-            print(f"[尝试 {attempt}/{MAX_RETRIES}] 话题「{topic}」与历史重复，重试中...", file=sys.stderr)
+        if is_duplicate(topic, history[-DEDUP_WINDOW:]):
+            print(f"[尝试 {attempt}/{MAX_RETRIES}] 话题「{topic}」与近期重复，重试中...", file=sys.stderr)
+            if fallback is None:
+                fallback = (content, topic)  # 记住第一个有效候选，避免空手而归
             rejected.append(topic)
             content = None
             continue
@@ -337,8 +341,12 @@ def main():
         break
 
     if content is None:
-        print(f"[警告] {MAX_RETRIES} 次尝试均未能生成新话题，跳过本次推送", file=sys.stderr)
-        sys.exit(1)
+        if fallback is not None:
+            content, topic = fallback
+            print("[降级] 无全新话题，推送最佳候选（可能与近期主题重叠）", file=sys.stderr)
+        else:
+            print(f"[警告] {MAX_RETRIES} 次均未生成有效内容，跳过本次推送", file=sys.stderr)
+            sys.exit(1)
 
     send_key = os.environ.get("SERVERCHAN_KEY")
     if send_key:
