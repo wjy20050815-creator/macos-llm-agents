@@ -6,6 +6,8 @@
 
 PubMed 学术论文 + 权威健康科学媒体（NewsAPI） → Groq LLaMA → Server酱 → 微信
 
+依赖 key（`run.sh` 经 `tools/load_env.sh` 注入）：`GROQ_API_KEY` `NEWSAPI_KEY` `SERVERCHAN_KEY`
+
 ## 内容来源（严格限定）
 
 | 类型 | 来源 | API |

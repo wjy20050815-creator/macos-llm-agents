@@ -75,6 +75,7 @@ macOS 自动化 agent 集合，统一通过 Server酱推送内容到微信。
 
 > 本表只覆盖 `~/.claude/skills/`。另外两层不在此表、勿重复建表（按各自来源为准）：
 > `~/.claude/commands/` 的 31 个斜杠命令（`/youtube` `/research` `/obsidian-*` 等）**全部是 obsidian-second-brain 仓库内 `commands/` 的 symlink**——删该 skill 会同时带崩这 31 个命令和 shukatsu_youtube agent（借用其 venv）；
+> 该 skill 目录是上游 git checkout 且带未提交本地修改（5 个 command 的路径修正等，2026-06-12）——git pull 更新前先 `git stash` 或检查 diff，本地路径修正必须保留；
 > marketplace 插件 6 个（weixin / hookify / skill-creator / github / claude-md-management / claude-code-setup），清单正本是 `~/.claude/plugins/installed_plugins.json`。
 
 ## 编码准则（Karpathy）
@@ -104,6 +105,7 @@ launchctl load   ~/Library/LaunchAgents/com.financial_news.morning2.plist
 ## 修改守则
 
 - 修改任何 agent 前，先读对应目录的 `CLAUDE.md`
+- 改 agent 行为（数据源/参数/触发）后，根 CLAUDE.md 和 agent 目录 CLAUDE.md **两边同步更新**（2026-06-12 GNews 漂移教训）
 - 新增 agent 时，在上方 Agents 表格追加一行
 - `.env` 只加不删，废弃的 key 注释掉而非删除
 - `*.log` 不提交 git，不手动截断，由各 agent 自行 append

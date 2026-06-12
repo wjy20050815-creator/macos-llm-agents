@@ -4,7 +4,9 @@
 
 ## 数据流
 
-NewsAPI（英文）→ Groq LLaMA → Server酱 → 微信
+NewsAPI + GNews（英文，双源合并去重）→ Groq LLaMA → Server酱 → 微信
+
+依赖 key（`run.sh` 经 `tools/load_env.sh` 注入）：`GROQ_API_KEY` `NEWSAPI_KEY` `GNEWS_KEY` `SERVERCHAN_KEY`
 
 ## 定时任务
 
