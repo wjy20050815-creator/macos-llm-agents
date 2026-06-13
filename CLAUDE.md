@@ -1,6 +1,6 @@
-# ClaudeCode
+# macos-llm-agents
 
-macOS 自动化 agent 集合，统一通过 Server酱推送内容到微信。
+macOS 自动化 agent 集合，统一通过 Server酱推送内容到微信。（本地目录名仍为 `ClaudeCode`，launchd 依赖该路径，勿改）
 
 ## Agents
 

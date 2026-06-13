@@ -1,4 +1,4 @@
-# ClaudeCode — a collection of macOS automation agents
+# macos-llm-agents — a collection of macOS automation agents
 
 [简体中文](README.md) | **English** | [日本語](README.ja.md)
 
